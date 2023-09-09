@@ -24,7 +24,7 @@ public class InventorySystem : MonoBehaviour
             }
             else if (itemList[i].item._name == item._name && itemList[i].stackCount + amount > itemList[i].maxStackCount)
             {
-                int deficit = ((itemList[i].stackCount + amount) - item._maxStackCount);
+                int deficit = itemList[i].stackCount + amount - item._maxStackCount;
                 itemList[i].stackCount += amount - deficit;
                 amount = deficit;
                 return;
