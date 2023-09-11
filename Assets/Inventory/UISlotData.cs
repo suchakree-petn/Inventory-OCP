@@ -11,20 +11,4 @@ public class UISlotData : MonoBehaviour, IPointerDownHandler
     {
         UIInventory.OnSlotClick?.Invoke(this.item);
     }
-
-    private void OnEnable()
-    {
-        UIInventory.OnSlotClick += SetCurrentSelectItem;
-    }
-    private void OnDisable()
-    {
-        UIInventory.OnSlotClick -= SetCurrentSelectItem;
-    }
-    private void SetCurrentSelectItem(Item item)
-    {
-        if (item != null)
-        {
-            InventorySystem.Instance.currentActiveInventoryUI._currentSelectItem = item;
-        }
-    }
 }
