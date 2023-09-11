@@ -2599,6 +2599,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1899687992278505816}
+  - component: {fileID: 6788886132231998044}
   m_Layer: 5
   m_Name: InventoryHorizontal
   m_TagString: Untagged
@@ -2629,6 +2630,31 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1781.842, y: 750.0001}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6788886132231998044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1899687992278505817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f95e21f48e3b8484caf3aa75985c24bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UISlot: []
+  _currentSelectItem: {fileID: 0}
+  _descriptionName: {fileID: 1899687991731088557}
+  _descriptionIcon: {fileID: 1899687990929287412}
+  _descriptionText: {fileID: 1899687992299112003}
+  _priceText: {fileID: 1899687992094571943}
+  _inventoryContentTransform: {fileID: 1899687991419894956}
+  _descriptionContentTransform: {fileID: 1899687990674995469}
+  slotPrefab: {fileID: 1330488598094877409, guid: cb34af654efd68c49bfe456ee3f4bf39, type: 3}
+  _slotItem: []
+  _money: 0
+  showMoney: {fileID: 1899687992094571943}
+  UIInventoryHorizontalPrefab: {fileID: 1899687992278505817}
 --- !u!1 &1899687992286123081
 GameObject:
   m_ObjectHideFlags: 0

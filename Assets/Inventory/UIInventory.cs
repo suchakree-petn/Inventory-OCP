@@ -5,10 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 
 
-public class UIInventory : MonoBehaviour
+public abstract class UIInventory : MonoBehaviour
 {
-    public static UIInventory Instance;
-
     [Header("Item List")]
     public List<GameObject> UISlot;
     public Item _currentSelectItem;
@@ -28,39 +26,33 @@ public class UIInventory : MonoBehaviour
 
     [Header("Prefab")]
     [SerializeField] private GameObject slotPrefab;
-    [SerializeField] private GameObject InventoryPrefab;
 
     public delegate void SlotActions(Item item);
     public static SlotActions OnSlotClick;
 
-    public delegate void CategoryActions(ItemType itemType);
+    public delegate void CategoryActions(Item item);
     public static CategoryActions OnCategoryClick;
 
-    List<SlotItem> _slotItem = new List<SlotItem>();
+    [SerializeField] private List<SlotItem> _slotItem = new List<SlotItem>();
 
     [Header("Money")]
     public int _money;
     public TextMeshProUGUI showMoney;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
     private void Start()
     {
         _slotItem = InventorySystem.Instance.itemList;
-        RefreshUIInventory(ItemType.Weapon);
-        OnSlotClick?.Invoke(_currentSelectItem);
-        showMoney.text = _money+"";
-
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (_slotItem.Count > 0)
         {
-            RefreshUIInventory(ItemType.Weapon);
+            _currentSelectItem = _slotItem[0].item;
             OnSlotClick?.Invoke(_currentSelectItem);
         }
+        else
+        {
+            Debug.Log("No item in list");
+        }
+
+        showMoney.text = _money + "";
 
     }
     private GameObject CreateUISlot(SlotItem slotItem)
@@ -75,7 +67,7 @@ public class UIInventory : MonoBehaviour
     public void BuyItem()
     {
         int priceItem = _currentSelectItem._price;
-        if(_money >= priceItem)
+        if (_money >= priceItem)
         {
             _money -= priceItem;
             showMoney.text = _money + "";
@@ -86,7 +78,7 @@ public class UIInventory : MonoBehaviour
             Debug.Log("Can not buy this item");
         }
     }
-    public void RefreshUIInventory(ItemType itemType)
+    public void RefreshInventoryData(Item item)
     {
         // Is list empty?
         if (_slotItem == null)
@@ -104,7 +96,23 @@ public class UIInventory : MonoBehaviour
         UISlot.Clear();
 
         // Create new slot
+        UISlot = GetItemListByType(item._itemType);
+
+        // Enable description
+        InitDescriptionUI();
+
+        // Refresh to show current select item info
+        Debug.Log("refresh data");
+        // RefreshUIInventory(_currentSelectItem);
+    }
+
+    public List<GameObject> GetItemListByType(ItemType itemType)
+    {
+        List<GameObject> _UISlot = new();
         SlotItem firstItemInSlot = null;
+        if(_slotItem.Count ==0){
+            Debug.Log("slot item: 0");
+        }
         for (int i = 0; i < _slotItem.Count; i++)
         {
 
@@ -115,7 +123,7 @@ public class UIInventory : MonoBehaviour
                     firstItemInSlot = _slotItem[i];
                 }
                 GameObject slot = CreateUISlot(_slotItem[i]);
-                UISlot.Add(slot);
+                _UISlot.Add(slot);
             }
         }
 
@@ -128,10 +136,8 @@ public class UIInventory : MonoBehaviour
         {
             _currentSelectItem = firstItemInSlot.item;
         }
-
-        // Enable description
-        InitDescriptionUI();
-
+        Debug.Log(_UISlot.Count);
+        return _UISlot;
     }
 
     private void InitDescriptionUI()
@@ -146,6 +152,15 @@ public class UIInventory : MonoBehaviour
             _inventoryContentTransform.gameObject.SetActive(true);
             _descriptionContentTransform.gameObject.SetActive(true);
         }
+    }
+
+    private void RefreshUIInventory(Item currentSelectItem)
+    {
+        Debug.Log("refresh ui");
+        RefreshDescriptionName(currentSelectItem);
+        RefreshDescriptionIcon(currentSelectItem);
+        RefreshDescriptionText(currentSelectItem);
+        RefreshPriceText(currentSelectItem);
     }
     private void RefreshDescriptionName(Item item)
     {
@@ -177,19 +192,22 @@ public class UIInventory : MonoBehaviour
         }
     }
 
+    public abstract void ShowInventory(Transform canvasTransform);
     private void OnEnable()
     {
-        OnSlotClick += RefreshDescriptionName;
-        OnSlotClick += RefreshDescriptionIcon;
-        OnSlotClick += RefreshDescriptionText;
-        OnSlotClick += RefreshPriceText;
+        OnSlotClick += RefreshInventoryData;
+        OnSlotClick += RefreshUIInventory;
+
+        OnCategoryClick += RefreshInventoryData;
+        OnCategoryClick += RefreshUIInventory;
+
     }
     private void OnDisable()
     {
-        OnSlotClick -= RefreshDescriptionName;
-        OnSlotClick -= RefreshDescriptionIcon;
-        OnSlotClick -= RefreshDescriptionText;
-        OnSlotClick -= RefreshPriceText;
+        OnSlotClick -= RefreshInventoryData;
+        OnSlotClick -= RefreshUIInventory;
 
+        OnCategoryClick -= RefreshInventoryData;
+        OnCategoryClick -= RefreshUIInventory;
     }
 }

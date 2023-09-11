@@ -5,13 +5,18 @@ using UnityEngine;
 public class InventorySystem : MonoBehaviour
 {
     public static InventorySystem Instance;
+    [SerializeField] private List<UIInventory> allInventoryType = new();
+    public UIInventory currentActiveInventoryUI;
+    public List<SlotItem> itemList = new List<SlotItem>();
+    public int _maxSlot;
     void Awake()
     {
         Instance = this;
     }
-
-    public List<SlotItem> itemList = new List<SlotItem>();
-    public int _maxSlot;
+    private void Start()
+    {
+        currentActiveInventoryUI.ShowInventory(GameObject.Find("Canvas").transform);
+    }
     public void Add(Item item, ref int amount)
     {
         for (int i = 0; i < itemList.Count; i++)

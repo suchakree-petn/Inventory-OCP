@@ -24,7 +24,7 @@ public class UISlotData : MonoBehaviour, IPointerDownHandler
     {
         if (item != null)
         {
-            UIInventory.Instance._currentSelectItem = item;
+            InventorySystem.Instance.currentActiveInventoryUI._currentSelectItem = item;
         }
     }
 }
