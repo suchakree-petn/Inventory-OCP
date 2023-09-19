@@ -16,9 +16,7 @@ public class FireWand : Weapon
     [SerializeField] private int fireBallAmount;
     [SerializeField] private GameObject fireBallPrefab;
 
-    private void Awake() {
-        _name  = "Staff";
-    }
+   
 
     // public override void Attack(GameObject attacker)
     // {

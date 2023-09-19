@@ -9,18 +9,10 @@ public class UICategory : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        UIInventory.OnCategoryClick?.Invoke(this._categoryType);
+        UIInventory currentActiveInventory = transform.parent.GetComponentInParent<UIInventory>();
+        GameObject firstSlotItem = currentActiveInventory.GetItemListByType(_categoryType)[0];
+
+        UIInventory.OnCategoryClick?.Invoke(firstSlotItem.GetComponent<UISlotData>().item);
     }
-    private void OnEnable()
-    {
-        UIInventory.OnCategoryClick += ShowAllByType;
-    }
-    private void OnDisable()
-    {
-        UIInventory.OnCategoryClick -= ShowAllByType;
-    }
-    private void ShowAllByType(ItemType itemType)
-    {
-        UIInventory.Instance.RefreshUIInventory(itemType);
-    }
+
 }
